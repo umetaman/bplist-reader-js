@@ -26,11 +26,6 @@ const MAGIC_NUMBERS = 'bplist'.split('').map((c) => c.charCodeAt(0));
 const VERSION_00 = '00'.split('').map((c) => c.charCodeAt(0));
 const VERSION_01 = '01'.split('').map((c) => c.charCodeAt(0));
 
-/**
- * Binary Plistかどうか
- * @param buffer
- * @returns
- */
 export const isBPlist = (buffer: ArrayBuffer): boolean => {
   if (buffer.byteLength < 8) {
     console.error('Buffer is too short to be a bplist');
@@ -170,9 +165,7 @@ const readAscii = (bits: number, dataView: DataView, offset: number): string => 
 
 const readUTF16 = (bits: number, dataView: DataView, offset: number): string => {
   if (bits < 15) {
-    // ここのビットが示すのは文字数
     const strCount = bits;
-    // UTF-16は1文字につき2byteなので、2倍する
     const buffer = dataView.buffer.slice(offset, offset + strCount * 2);
     return new TextDecoder('utf-16be').decode(buffer);
   } else {
@@ -182,7 +175,6 @@ const readUTF16 = (bits: number, dataView: DataView, offset: number): string => 
     if (type !== TYPE_INT) {
       throw new Error('Invalid Length Data.');
     }
-    // ここのIntが示すのは文字数
     const stringCount = readInteger(bits, dataView, offset + MARKER_BYTE_LENGTH);
     const integerLength = Pow2(bits);
     const stringOffset = offset + MARKER_BYTE_LENGTH + integerLength;
@@ -204,7 +196,6 @@ const readArray = (
   let arrayOffset = offset;
   if (bits < 15) {
     length = bits;
-    // marker分進める
   } else {
     const marker = dataView.getUint8(offset);
     const type = marker & 0xf0;
@@ -217,10 +208,8 @@ const readArray = (
   }
 
   const array: unknown[] = [];
-  // 指定された要素分、ObjectRefが配置されている
   // 1010 nnnn [int] [...objectRef]
   for (let i = 0; i < length; i++) {
-    // OffsetTableにおけるOffset
     const objectRef = bytesToUnsignedInteger(
       dataView,
       arrayOffset + i * trailer.objectRefSize,
@@ -254,10 +243,8 @@ const readDictionary = (
   }
 
   const dict: PlistDictionary = {};
-  // 指定された要素分、ObjectRefが配置されている
   // 1101 nnnn [int] [...objectRef]
   for (let i = 0; i < length; i++) {
-    // OffsetTableにおけるOffset
     const keyRef = bytesToUnsignedInteger(
       dataView,
       dictOffset + i * trailer.objectRefSize,
@@ -283,8 +270,6 @@ export const readObject = (
   trailer: Trailer,
   objectRef: number,
 ): PlistObject | PlistDictionary | unknown[] => {
-  // Rootのオブジェクトから読む
-  // まずはmarkerから
   const offset = readOffset(dataView, trailer, objectRef);
   const marker = dataView.getUint8(offset);
   const type = marker & 0xf0;
@@ -328,7 +313,6 @@ export const readOffset = (
 
 export const readPlist = (buffer: ArrayBuffer): unknown => {
   const dataView = new DataView(buffer);
-  // まずはTrailerを読む
   const trailer = Trailer.Read(dataView);
 
   return readObject(dataView, trailer, Number(trailer.topObjectOffset));
