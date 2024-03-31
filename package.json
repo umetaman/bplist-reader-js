@@ -6,7 +6,7 @@
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "files": [
-    "dist"
+    "dist/esm/"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
