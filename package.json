@@ -1,5 +1,5 @@
 {
-  "name": "nanoplist",
+  "name": "bplist-reader",
   "version": "0.0.0",
   "description": "Binary Plist Reader/Writer",
   "main": "dist/cjs/index.js",
@@ -11,7 +11,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:cjs": "tsc --project tsconfig.cjs.json",
-    "build:esm": "tsc --project tsconfig.esm.json"
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "test:read": "ts-node ./src/test/read.ts"
   },
   "author": "umetaman",
   "license": "Zlib",
