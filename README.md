@@ -17,5 +17,5 @@ bplist-reader-js is a reader library for Apple Binary Property List (*.plist).
 
 ## References
 
-- [Ushio/NanoPlist](https://github.com/Ushio/NanoPlist)
+- [Ushio/NanoPlist](https://github.com/Ushio/NanoPlist) : Great Library !
 - [MEDIUM | Understanding Apple's binary property list format](https://medium.com/@karaiskc/understanding-apples-binary-property-list-format-281e6da00dbd)
