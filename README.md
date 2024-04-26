@@ -1,6 +1,6 @@
-# NanoPlist.js
+# bplist-reader-js
 
-NanoPlist.js is a reader library for Apple Binary Property List (*.plist).
+bplist-reader-js is a reader library for Apple Binary Property List (*.plist).
 
 ## Support Types
 
